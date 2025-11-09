@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actualizar Datos - Portal DMS People</title>
+  <link rel="stylesheet" href="actualizarDatosStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software">
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar" id="user-avatar">MM</div>
+        <div class="user-details">
+          <strong>---</strong>
+          <span>---</span>
+        </div>
+
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li onclick="window.location.href='dashboard.html'">Volver al Dashboard</li>
+            <li onclick="cerrarSesion()">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section class="update-section">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Volver</button>
+        <h2>Actualizar Información Personal</h2>
+        <p>Revisa y actualiza tus datos laborales y de contacto.</p>
+
+        <form id="updateForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de documento</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Número de documento</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Lugar de expedición</label>
+              <input type="text" value="---">
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de nacimiento</label>
+              <input type="date" value="---">
+            </div>
+
+            <div class="form-group">
+              <label>Cargo</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de inicio laboral</label>
+              <input type="date" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de contrato</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Correo corporativo</label>
+              <input type="text" value="---" readonly>
+            </div>
+
+            <div class="form-group">
+              <label>Dirección</label>
+              <input type="text" value="---">
+            </div>
+
+            <div class="form-group">
+              <label>Correo electrónico personal</label>
+              <input type="email" value="---">
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" value="3023413364">
+            </div>
+
+            <div class="form-group">
+              <label>Contacto de emergencia</label>
+              <input type="text" value="Willinton Posso">
+            </div>
+
+            <div class="form-group">
+              <label>Teléfono de emergencia</label>
+              <input type="tel" value="3246357219">
+            </div>
+
+            <div class="form-group">
+              <label>Parentesco</label>
+              <select>
+                <option>Hijo/a</option>
+                <option selected>Conyugue</option>
+                <option>Amigo/a</option>
+                <option>Madre/Padre</option>
+                <option>Hermano/Hermana</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn">Guardar Cambios</button>
+            <button type="button" class="btn-cancel" onclick="cancelarCambios()">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- ALERTA VISUAL -->
+  <div id="alert-box" class="alert-box"></div>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  <div id="confirm-modal" class="confirm-modal">
+    <div class="confirm-content">
+      <h3>¿Cancelar cambios?</h3>
+      <p>Se perderán los datos no guardados.</p>
+      <div class="confirm-buttons">
+        <button id="confirm-yes" class="btn">Sí, cancelar</button>
+        <button id="confirm-no" class="btn-cancel">No, volver</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./APIS/datosEmpleados.js"></script>
+  <script src="./APIS/contactosEmergencia.js"></script>
+
+  <!-- SCRIPTS -->
+  <script>
+    // ===== MENÚ DESPLEGABLE USUARIO =====
+    const userInfo = document.getElementById("user-info");
+    const userMenu = document.getElementById("user-menu");
+
+    userInfo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+    window.addEventListener("click", () => userMenu.style.display = "none");
+
+    // ===== CERRAR SESIÓN =====
+    function cerrarSesion() {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    }
+
+    // ===== ALERTA VISUAL =====
+    const form = document.getElementById("updateForm");
+    const alertBox = document.getElementById("alert-box");
+
+    function mostrarAlerta(mensaje, tipo) {
+      alertBox.textContent = mensaje;
+      alertBox.className = `alert-box ${tipo}`;
+      alertBox.style.display = "block";
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => {
+          alertBox.style.display = "none";
+          alertBox.style.opacity = "1";
+        }, 300);
+      }, 3000);
+    }
+
+    // ===== GUARDAR CAMBIOS =====
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      mostrarAlerta("✅ Cambios guardados correctamente.", "success");
+    });
+
+    // ===== CONFIRMACIÓN DE CANCELACIÓN =====
+    const confirmModal = document.getElementById("confirm-modal");
+    const confirmYes = document.getElementById("confirm-yes");
+    const confirmNo = document.getElementById("confirm-no");
+
+    function cancelarCambios() {
+      confirmModal.style.display = "flex";
+    }
+
+    confirmYes.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+      mostrarAlerta("❌ Cambios cancelados.", "cancel");
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 2000);
+    });
+
+    confirmNo.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+    });
+  </script>
+</body>
+</html>

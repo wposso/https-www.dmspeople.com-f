@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --blue-dark: #0a2342;
+  --blue-medium: #0d4a87;
+}
+
+/* GENERAL */
+body {
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  padding: 30px 35px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* ENCABEZADO */
+.logo-container {
+  text-align: left;
+}
+
+.logo {
+margin-top: 10px;
+  width: 110px;
+  height: auto;
+}
+
+.letter-header h1 {
+  text-align: center;
+  font-size: 23px;
+  color: var(--blue-dark);
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+
+.date {
+  text-align: left;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 27px;
+  margin-top: 32px;
+}
+
+/* INFORMACIÓN EMPLEADO */
+.employee-info {
+  margin-bottom: 25px;
+}
+
+.employee-info h3 {
+  color: var(--blue-dark);
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--blue-light);
+  padding-bottom: 8px;
+}
+
+.employee-info table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-info td {
+  padding: 6px 10px;
+  font-size: 0.95rem;
+}
+
+/* DETALLE DE PAGO */
+.table-detalle {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table-detalle th,
+.table-detalle td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.table-detalle th {
+  background-color: #e3f0ff;
+  color: var(--blue-dark);
+  font-weight: 600;
+}
+
+/* TOTALES */
+.total-box {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background: #f8faff;
+  width: 50%;
+  margin-top: 25px;
+}
+
+.total-box p {
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.total-box .neto {
+  font-weight: 600;
+  color: var(--blue-medium);
+  font-size: 1.1rem;
+}
+
+/* FIRMA */
+.signature {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.signature p {
+  margin: 5px 0;
+  color: var(--blue-dark);
+  font-weight: 500;
+}
+
+
+
+/* PIE DE PÁGINA */
+.footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+  border-top: 1px solid #ccc;
+  margin-top: 50px;
+  padding-top: 10px;
+}
+
+/* IMPRESIÓN / PDF */
+@media print {
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    box-shadow: none;
+    margin: 0;
+    padding: 30px 35px;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

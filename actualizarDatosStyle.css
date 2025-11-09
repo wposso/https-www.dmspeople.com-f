@@ -1,0 +1,343 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --blue-dark: #0a2342;
+  --blue-medium: #0d4a87;
+  --blue-light: #e3f0ff;
+  --gray-light: #f4f6f8;
+  --white: #fff;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--gray-light);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+header {
+  background-color: var(--blue-dark);
+  color: var(--white);
+  padding: 15px 0;
+  box-shadow: var(--shadow);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 45px;
+}
+
+.logo h1 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* ===== USER INFO ===== */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: var(--blue-medium);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.user-details span {
+  display: block;
+  font-size: 0.8rem;
+  color: #ddd;
+}
+
+/* ===== MENÚ DESPLEGABLE ===== */
+.user-menu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+  width: 180px;
+  z-index: 100;
+}
+
+.user-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-menu li {
+  padding: 12px 16px;
+  color: var(--blue-dark);
+  font-size: 15px;
+  transition: background 0.3s;
+}
+
+.user-menu li:hover {
+  background-color: var(--blue-light);
+  color: var(--blue-medium);
+}
+
+/* ===== MAIN ===== */
+main {
+  flex: 1;
+  padding: 40px 0;
+}
+
+.update-section {
+  background-color: var(--white);
+  padding: 40px 60px; /* 🧩 antes era 30px, ahora más espacio horizontal */
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  max-width: 1100px; /* 🧩 limita ancho máximo para mantener centrado */
+  margin: 0 auto; /* 🧩 centra el formulario en la pantalla */
+}
+
+.update-section h2 {
+  color: var(--blue-dark);
+  margin-bottom: 10px;
+}
+
+.update-section p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--blue-dark);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--blue-medium);
+  outline: none;
+  box-shadow: 0 0 5px rgba(13, 74, 135, 0.3);
+}
+
+input[readonly] {
+  background-color: #f1f3f6;
+  cursor: not-allowed;
+}
+
+/* ===== BOTONES ===== */
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  background-color: var(--blue-medium);
+  color: var(--white);
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background-color: var(--blue-dark);
+}
+
+.btn-cancel {
+     padding: 12px 25px;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+  background-color: #ccc;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background-color: #bbb;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background-color: var(--blue-dark);
+  color: var(--white);
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* ===== BOTÓN DE RETROCESO ===== */
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--blue-medium);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 15px;
+  transition: var(--transition);
+}
+
+.back-btn:hover {
+  color: var(--blue-dark);
+  transform: translateX(-3px);
+}
+
+/* ===== ALERTA VISUAL ===== */
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--blue-medium);
+  color: white;
+  padding: 14px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  font-size: 15px;
+  display: none;
+  z-index: 2000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Éxito (guardar cambios) */
+.alert-box.success {
+  background-color: #28a745;
+}
+
+/* Cancelación */
+.alert-box.cancel {
+  background-color: #dc3545;
+}
+/* ===== ALERTA VISUAL ===== */
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--blue-medium);
+  color: white;
+  padding: 14px 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  font-size: 15px;
+  display: none;
+  z-index: 2000;
+  transition: opacity 0.3s ease;
+}
+.alert-box.success {
+  background-color: #28a745;
+}
+.alert-box.cancel {
+  background-color: #dc3545;
+}
+
+/* ===== MODAL DE CONFIRMACIÓN ===== */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.confirm-content {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.confirm-content h3 {
+  color: var(--blue-dark);
+  margin-bottom: 10px;
+}
+
+.confirm-content p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}

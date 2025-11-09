@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitar Vacaciones - Portal DMS People</title>
+  <link rel="stylesheet" href="vacacionesStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software" />
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar">MM</div>
+        <div class="user-details">
+          <strong>Melissa Mora</strong>
+          <span>Empleado</span>
+        </div>
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li id="update-profile">Actualizar datos</li>
+            <li onclick="cerrarSesion()">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section class="vacation-section">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Volver</button>
+        <h2>Solicitar Vacaciones</h2>
+        <p>Consulta tus días disponibles y realiza una nueva solicitud.</p>
+
+        <!-- INFORMACIÓN -->
+        <div class="vacation-info">
+          <div class="info-card">
+            <h3>Días disponibles</h3>
+            <p class="green">10</p>
+          </div>
+          <div class="info-card">
+            <h3>Días tomados</h3>
+            <p class="orange">5</p>
+          </div>
+          <div class="info-card">
+            <h3>Próximas vacaciones</h3>
+            <p>01/12/2025 - 10/12/2025</p>
+          </div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="card">
+          <h3>Nueva Solicitud</h3>
+          <form id="vacationForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Fecha inicio</label>
+                <input type="date" id="inicio" required>
+              </div>
+
+              <div class="form-group">
+                <label>Fecha fin</label>
+                <input type="date" id="fin" required>
+              </div>
+
+              <div class="form-group">
+                <label>Días solicitados</label>
+                <input type="number" id="dias" readonly>
+              </div>
+
+              <div class="form-group">
+                <label>Jefe inmediato</label>
+                <select required>
+                  <option value="">Seleccione...</option>
+                  <option value="Juan Atehortúa">Juan Atehortúa</option>
+                  <option value="Laura Mejía">Laura Mejía</option>
+                  <option value="Carlos Ríos">Carlos Ríos</option>
+                </select>
+              </div>
+
+              <div class="form-group full">
+                <label>Observaciones</label>
+                <textarea rows="3"></textarea>
+              </div>
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="btn">Enviar Solicitud</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="card">
+          <h3>Historial de solicitudes</h3>
+          <table class="table-history">
+            <thead>
+              <tr>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Días</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="historial">
+              <tr>
+                <td>15/08/2025</td>
+                <td>20/08/2025</td>
+                <td>6</td>
+                <td><span class="status approved">Aprobada</span></td>
+              </tr>
+              <tr>
+                <td>05/10/2025</td>
+                <td>10/10/2025</td>
+                <td>6</td>
+                <td><span class="status pending">Pendiente</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- MODAL DE ALERTA -->
+  <div class="modal" id="modal-alert">
+    <div class="modal-content">
+      <h3 id="modal-title"></h3>
+      <p id="modal-message"></p>
+      <button onclick="cerrarModal()" class="btn">Aceptar</button>
+    </div>
+  </div>
+
+  <script src="./APIS/vacaciones.js"></script>
+
+  <script>
+    // Menú desplegable
+    const userInfo = document.getElementById("user-info");
+    const userMenu = document.getElementById("user-menu");
+    userInfo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+    window.addEventListener("click", () => userMenu.style.display = "none");
+
+    // Calcular días hábiles (lunes a sábado)
+    document.getElementById("inicio").addEventListener("change", calcularDias);
+    document.getElementById("fin").addEventListener("change", calcularDias);
+
+    function calcularDias() {
+      const inicio = new Date(document.getElementById("inicio").value);
+      const fin = new Date(document.getElementById("fin").value);
+      let count = 0;
+
+      if (inicio && fin && fin >= inicio) {
+        let fecha = new Date(inicio);
+        while (fecha <= fin) {
+          const dia = fecha.getDay();
+          if (dia !== 0) count++; // excluye domingo
+          fecha.setDate(fecha.getDate() + 1);
+        }
+      }
+      document.getElementById("dias").value = count;
+    }
+
+    // Mostrar modal de alerta
+    function mostrarModal(titulo, mensaje) {
+      document.getElementById("modal-title").innerText = titulo;
+      document.getElementById("modal-message").innerText = mensaje;
+      document.getElementById("modal-alert").style.display = "flex";
+    }
+
+    function cerrarModal() {
+      document.getElementById("modal-alert").style.display = "none";
+    }
+
+    // Enviar formulario
+    document.getElementById("vacationForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      mostrarModal("✅ Solicitud enviada", "Tu solicitud de vacaciones fue enviada correctamente. Será revisada por tu jefe inmediato.");
+      e.target.reset();
+      document.getElementById("dias").value = "";
+    });
+
+
+    document.getElementById("update-profile").addEventListener("click", () => {
+      window.location.href = "actualizarDatos.html";
+    });
+
+    // Cerrar sesión
+    function cerrarSesion() {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+
+</html>

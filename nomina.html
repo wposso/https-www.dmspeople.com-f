@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprobante de Nómina - Portal DMS People</title>
+  <link rel="stylesheet" href="nominaStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software" />
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar">MM</div>
+        <div class="user-details">
+          <strong>Melissa Mora</strong>
+          <span>Empleado</span>
+        </div>
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li id="update-profile">Actualizar datos</li>
+            <li onclick="cerrarSesion()">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section class="nomina-section">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Volver</button>
+        <h2>Consulta de Comprobantes de Nómina</h2>
+        <p>Selecciona el periodo para generar o consultar tus comprobantes.</p>
+
+        <!-- FORMULARIO -->
+        <div class="card">
+          <h3>Generar Comprobante</h3>
+          <form id="nominaForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Año</label>
+                <select id="anio" required>
+                  <option value="">Seleccione...</option>
+                  <option>2025</option>
+                  <option>2024</option>
+                  <option>2023</option>
+                  <option>2022</option>
+                  <option>2021</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Mes</label>
+                <select id="mes" required>
+                  <option value="">Seleccione...</option>
+                  <option>Enero</option>
+                  <option>Febrero</option>
+                  <option>Marzo</option>
+                  <option>Abril</option>
+                  <option>Mayo</option>
+                  <option>Junio</option>
+                  <option>Julio</option>
+                  <option>Agosto</option>
+                  <option>Septiembre</option>
+                  <option>Octubre</option>
+                  <option>Noviembre</option>
+                  <option>Diciembre</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Quincena</label>
+                <select id="quincena" required>
+                  <option value="">Seleccione...</option>
+                  <option value="1">Primera</option>
+                  <option value="2">Segunda</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="btn">Generar Comprobante</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="card">
+          <h3>Historial de Comprobantes</h3>
+          <table class="table-history">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Mes</th>
+                <th>Quincena</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="historial">
+              <tr>
+                <td>2025</td>
+                <td>Septiembre</td>
+                <td>1</td>
+                <td>
+                  <button class="btn-small" onclick="abrirNominaPDF()">📄 Descargar PDF</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- ALERTA VISUAL -->
+  <div id="alert-box" class="alert-box"></div>
+
+  <script>
+    // ============================================
+    // ====== CARGAR DATOS DEL USUARIO HEADER =====
+    // ============================================
+
+    async function cargarDatosUsuarioHeader() {
+      const session = JSON.parse(localStorage.getItem("dms_user"));
+      const userId = session?.user?.id;
+
+      if (!userId) {
+        console.error("⚠️ No hay usuario activo en LocalStorage.");
+        return;
+      }
+
+      const url = `http://localhost:3000/api/infouser/${userId}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error al consultar la API de usuario");
+
+        const { data } = await response.json();
+        const nombre = data?.nombre || "Usuario";
+        const cargo = data?.cargo || "Empleado";
+
+        // Actualizar avatar con iniciales
+        const avatar = document.querySelector(".user-avatar");
+        const detalles = document.querySelector(".user-details strong");
+        const cargoSpan = document.querySelector(".user-details span");
+
+        if (avatar) {
+          const iniciales = nombre
+            .split(" ")
+            .map((n) => n.charAt(0))
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+          avatar.textContent = iniciales;
+        }
+
+        if (detalles) detalles.textContent = nombre;
+        if (cargoSpan) cargoSpan.textContent = cargo;
+      } catch (error) {
+        console.error("❌ Error cargando datos del usuario:", error);
+      }
+    }
+
+    // =======================================================
+    // ===== MENÚ DESPLEGABLE DEL USUARIO Y CERRAR SESIÓN =====
+    // =======================================================
+
+    function configurarMenuUsuario() {
+      const userInfo = document.getElementById("user-info");
+      const userMenu = document.getElementById("user-menu");
+
+      if (!userInfo || !userMenu) return;
+
+      userInfo.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+      });
+
+      window.addEventListener("click", () => {
+        userMenu.style.display = "none";
+      });
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    }
+
+    // =======================================================
+    // ===== ALERTAS VISUALES =====
+    // =======================================================
+
+    function mostrarAlerta(mensaje, tipo) {
+      const alertBox = document.getElementById("alert-box");
+      if (!alertBox) return;
+
+      alertBox.textContent = mensaje;
+      alertBox.className = `alert-box ${tipo}`;
+      alertBox.style.display = "block";
+
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => {
+          alertBox.style.display = "none";
+          alertBox.style.opacity = "1";
+        }, 300);
+      }, 3000);
+    }
+
+    // =======================================================
+    // ===== FORMULARIO DE COMPROBANTE DE NÓMINA =====
+    // =======================================================
+
+    function configurarFormularioNomina() {
+      const form = document.getElementById("nominaForm");
+      if (!form) return;
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        mostrarAlerta("✅ Comprobante generado correctamente. Disponible para descargar.", "success");
+        e.target.reset();
+      });
+    }
+
+    function abrirNominaPDF() {
+      window.open("nominaTemplate.html", "_blank");
+    }
+
+    function configurarBotones() {
+      const updateProfile = document.getElementById("update-profile");
+      if (updateProfile) {
+        updateProfile.addEventListener("click", () => {
+          window.location.href = "actualizarDatos.html";
+        });
+      }
+    }
+
+    // =======================================================
+    // ===== INICIALIZAR TODO AL CARGAR LA PÁGINA =====
+    // =======================================================
+
+    window.addEventListener("DOMContentLoaded", () => {
+      cargarDatosUsuarioHeader();
+      configurarMenuUsuario();
+      configurarFormularioNomina();
+      configurarBotones();
+    });
+
+  </script>
+
+
+</body>
+
+</html>

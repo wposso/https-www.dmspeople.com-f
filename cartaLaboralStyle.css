@@ -1,0 +1,457 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* =====================================================
+   🎨 VARIABLES Y ESTILOS BASE
+===================================================== */
+:root {
+  --blue-dark: #0a2342;
+  --blue-medium: #0d4a87;
+  --blue-light: #e3f0ff;
+  --gray-light: #f4f6f8;
+  --white: #fff;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: var(--blue-medium);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 15px;
+  transition: var(--transition);
+}
+
+.back-btn:hover {
+  color: var(--blue-dark);
+  transform: translateX(-3px);
+}
+
+body {
+  background: var(--gray-light);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =====================================================
+   🧭 HEADER
+===================================================== */
+header {
+  background-color: var(--blue-dark);
+  color: var(--white);
+  padding: 15px 0;
+  box-shadow: var(--shadow);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 45px;
+}
+
+.logo h1 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* =====================================================
+   👤 MENÚ DE USUARIO
+===================================================== */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--blue-medium);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.user-details span {
+  display: block;
+  font-size: 0.8rem;
+  color: #ddd;
+}
+
+.user-menu {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 180px;
+  background-color: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  z-index: 100;
+}
+
+.user-menu ul {
+  list-style: none;
+}
+
+.user-menu li {
+  padding: 12px 16px;
+  color: var(--blue-dark);
+  font-size: 15px;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.user-menu li:hover {
+  background-color: var(--blue-light);
+  color: var(--blue-medium);
+}
+
+/* =====================================================
+   📋 CONTENIDO PRINCIPAL
+===================================================== */
+main {
+  flex: 1;
+  padding: 40px 0;
+}
+
+.letter-section {
+  background-color: var(--white);
+  padding: 40px 60px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.letter-section h2 {
+  color: var(--blue-dark);
+  margin-bottom: 10px;
+}
+
+.letter-section p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* =====================================================
+   🧾 FORMULARIO DE CARTA
+===================================================== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--blue-dark);
+}
+
+input[type="text"],
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: var(--transition);
+}
+
+input:focus {
+  border-color: var(--blue-medium);
+  outline: none;
+  box-shadow: 0 0 5px rgba(13, 74, 135, 0.3);
+}
+
+input[readonly] {
+  background-color: #f1f3f6;
+  cursor: not-allowed;
+}
+
+/* ===== CHECK PERSONALIZADO (Incluir Sueldo) ===== */
+.sueldo-check label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--blue-dark);
+  font-weight: 500;
+  background-color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+/* Elimina estilo por defecto */
+.sueldo-check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--blue-dark);
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Al pasar el cursor */
+.sueldo-check input[type="checkbox"]:hover {
+  border-color: var(--blue-medium);
+}
+
+/* Estado activo (marcado) */
+.sueldo-check input[type="checkbox"]:checked {
+  background-color: var(--blue-dark);
+  border-color: var(--blue-dark);
+}
+
+/* Check interno (✓) */
+.sueldo-check input[type="checkbox"]:checked::after {
+  content: '✔';
+  position: absolute;
+  top: 0;
+  left: 3px;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+
+/* =====================================================
+   🔘 BOTONES
+===================================================== */
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  background-color: var(--blue-medium);
+  color: var(--white);
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background-color: var(--blue-dark);
+}
+
+#confirm-no.btn-cancel {
+  background-color: #ccc;      /* gris claro */
+  color: #333;
+  border: none;                /* 🔹 elimina el borde */
+  border-radius: 8px;         /* 🔹 bordes redondeados tipo píldora */
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#confirm-no.btn-cancel:hover {
+  background-color: #999;      /* gris más oscuro al pasar el cursor */
+  color: #fff;
+  transform: scale(1.05);      /* sutil efecto de zoom */
+}
+
+/* ===== TÍTULO DE HISTORIAL ===== */
+.letter-section h3 {
+  color: var(--blue-dark);
+  margin-top: 20px;   /* 🔹 separa del botón Generar Carta */
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+
+/* =====================================================
+   📜 TABLA DE HISTORIAL
+===================================================== */
+.table-history {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 26px;
+  table-layout: fixed; /* ✅ mantiene el ancho uniforme */
+}
+
+.table-history th,
+.table-history td {
+  border: 1px solid #ddd;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  word-wrap: break-word; /* ✅ evita que el texto rompa la tabla */
+}
+
+.table-history th {
+  background-color: var(--blue-light);
+  color: var(--blue-dark);
+  font-weight: 600;
+}
+
+/* 🔹 Contenedor para centrar el botón */
+.table-history td button {
+  display: inline-block;
+  margin: 0 auto;
+  white-space: nowrap; /* ✅ evita que el texto del botón se divida */
+}
+
+/* 🔹 Estilo del botón */
+.btn-small {
+  background-color: var(--blue-medium);
+  color: var(--white);
+  border: none;
+  padding: 8px 16px; /* más espacio interior */
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-small:hover {
+  background-color: var(--blue-dark);
+  transform: scale(1.02);
+}
+
+
+/* =====================================================
+   ⚠️ ALERTAS
+===================================================== */
+.alert-box {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--blue-medium);
+  color: var(--white);
+  padding: 14px 25px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: var(--shadow);
+  display: none;
+  z-index: 2000;
+  transition: opacity 0.3s ease;
+}
+
+.alert-box.success {
+  background-color: #28a745;
+}
+
+/* =====================================================
+   🪟 MODAL DE CONFIRMACIÓN
+===================================================== */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.confirm-content {
+  background: var(--white);
+  padding: 30px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}
+
+.confirm-content h3 {
+  color: var(--blue-dark);
+  margin-bottom: 20px;
+}
+
+.confirm-content p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =====================================================
+   🧭 FOOTER
+===================================================== */
+footer {
+  background-color: var(--blue-dark);
+  color: var(--white);
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+}
+
+/* =====================================================
+   📱 RESPONSIVE
+===================================================== */
+@media (max-width: 780pxx) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .letter-section {
+    padding: 30px 25px;
+  }
+}

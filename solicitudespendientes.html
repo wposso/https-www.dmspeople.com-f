@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitudes Pendientes - Portal DMS People</title>
+  <link rel="stylesheet" href="solicitudesStyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software" />
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar">MM</div>
+        <div class="user-details">
+          <strong>Melissa Mora</strong>
+          <span>Coordinador de desarrollo</span>
+        </div>
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li onclick="cerrarSesion()">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section class="vacation-section">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Volver</button>
+        <h2>Solicitudes Pendientes de Vacaciones</h2>
+        <p>Revisa, aprueba o rechaza las solicitudes enviadas por tus colaboradores.</p>
+
+        <!-- TABLA DE SOLICITUDES -->
+        <div class="card">
+          <table class="table-history">
+            <thead>
+              <tr>
+                <th>Empleado</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Días</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSolicitudes">
+              <tr>
+                <td>Melissa Mora</td>
+                <td>05/10/2025</td>
+                <td>10/10/2025</td>
+                <td>6</td>
+                <td>Viaje familiar</td>
+                <td>
+                  <button class="btn-small approve" onclick="abrirModal('aprobar')">✔ Aprobar</button>
+                  <button class="btn-small reject" onclick="abrirModal('rechazar')">✖ Rechazar</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Carlos Pérez</td>
+                <td>12/11/2025</td>
+                <td>18/11/2025</td>
+                <td>7</td>
+                <td>Descanso programado</td>
+                <td>
+                  <button class="btn-small approve" onclick="abrirModal('aprobar')">✔ Aprobar</button>
+                  <button class="btn-small reject" onclick="abrirModal('rechazar')">✖ Rechazar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- ALERTA VISUAL -->
+  <div id="alert-box" class="alert-box"></div>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  <div id="confirm-modal" class="confirm-modal">
+    <div class="confirm-content">
+      <h3 id="modal-title">Confirmar acción</h3>
+      <p id="modal-message">¿Estás seguro de aprobar esta solicitud?</p>
+      <div class="confirm-buttons">
+        <button id="confirm-yes" class="btn">Confirmar</button>
+        <button id="confirm-no" class="btn-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const userInfo = document.getElementById("user-info");
+    const userMenu = document.getElementById("user-menu");
+    userInfo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+    window.addEventListener("click", () => userMenu.style.display = "none");
+
+    const alertBox = document.getElementById("alert-box");
+    const confirmModal = document.getElementById("confirm-modal");
+    const confirmYes = document.getElementById("confirm-yes");
+    const confirmNo = document.getElementById("confirm-no");
+    const modalTitle = document.getElementById("modal-title");
+    const modalMessage = document.getElementById("modal-message");
+    let accionActual = '';
+
+    function mostrarAlerta(mensaje, tipo) {
+      alertBox.textContent = mensaje;
+      alertBox.className = `alert-box ${tipo}`;
+      alertBox.style.display = "block";
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => {
+          alertBox.style.display = "none";
+          alertBox.style.opacity = "1";
+        }, 300);
+      }, 3000);
+    }
+
+    function abrirModal(accion) {
+      accionActual = accion;
+      modalTitle.textContent = accion === 'aprobar' ? 'Aprobar solicitud' : 'Rechazar solicitud';
+      modalMessage.textContent = accion === 'aprobar'
+        ? '¿Deseas aprobar esta solicitud de vacaciones?'
+        : '¿Deseas rechazar esta solicitud?';
+      confirmModal.style.display = "flex";
+    }
+
+    confirmYes.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+      if (accionActual === 'aprobar') {
+        mostrarAlerta("✅ Solicitud aprobada exitosamente.", "success");
+      } else {
+        mostrarAlerta("❌ Solicitud rechazada.", "cancel");
+      }
+    });
+
+    confirmNo.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+    });
+
+    function cerrarSesion() {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

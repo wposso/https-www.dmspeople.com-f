@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --blue-dark: #0a2342;
+  --blue-medium: #0d4a87;
+}
+
+/* General */
+body {
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+/* Contenedor principal */
+.page {
+  width: 210mm; /* Tamaño A4 exacto */
+  min-height: 297mm;
+  background: #fff;
+  padding: 15mm 25mm 25mm 25mm; /* 🔹 antes era 30mm arriba, ahora 15mm */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  position: relative;
+  box-sizing: border-box;
+}
+
+
+/* Encabezado */
+.logo-container {
+  text-align: left;
+  margin-bottom: 1px;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+}
+
+.letter-header h1 {
+  text-align: center;
+  font-size: 25px;
+  color: var(--blue-dark);
+  margin-bottom: 70px;
+  margin-top: 40px;
+}
+ 
+
+.date {
+  text-align: right;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Cuerpo */
+.content {
+  text-align: justify;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.content p {
+  margin-bottom: 18px;
+}
+
+.content strong {
+  color: var(--blue-dark);
+}
+
+/* Firma */
+.signature {
+  margin-top: 60px;
+  text-align: left;
+}
+
+.signature p {
+  margin: 5px 0;
+  color: var(--blue-dark);
+  font-weight: 500;
+}
+
+/* Pie de página */
+.footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+  border-top: 1px solid #ccc;
+  margin-top: 60px;
+  padding-top: 10px;
+}
+
+/* Botón (no se imprime) */
+.no-print {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.no-print button {
+  background-color: var(--blue-medium);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.no-print button:hover {
+  background-color: var(--blue-dark);
+}
+
+/* Configuración para impresión */
+@media print {
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+  .page {
+    box-shadow: none;
+    margin: 0;
+    padding: 15mm 25mm 25mm 25mm;
+    page-break-inside: avoid;
+  }
+  .no-print {
+    display: none;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

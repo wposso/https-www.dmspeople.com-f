@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta Laboral</title>
+  <link rel="stylesheet" href="cartaLaboralTemp.css">
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- ENCABEZADO -->
+    <header class="letter-header">
+      <div class="logo-container">
+        <img src="recursos/logoazul.png" alt="Logo DMS Software" class="logo">
+      </div>
+
+      <h1>CERTIFICADO LABORAL</h1>
+
+
+      <div class="date">
+        <p><strong>Fecha:</strong> {{fechaActual}}</p>
+      </div>
+    </header>
+
+    <!-- CONTENIDO -->
+    <section class="content">
+      <p><strong>{{aquienInterese}}</strong></p>
+
+      <p>
+        Por medio de la presente certificamos que <strong>{{nombreCompleto}}</strong>,
+        identificado(a) con <strong>{{tipoDocumento}} No. {{numeroDocumento}}</strong>,
+        labora en nuestra empresa <strong>DMS Software S.A.S.</strong> desde el día
+        <strong>{{fechaInicio}}</strong>, desempeñando el cargo de
+        <strong>{{cargo}}</strong> bajo un contrato de tipo
+        <strong>{{tipoContrato}}</strong>.
+      </p>
+
+      {{#if incluirSueldo}}
+      <p>
+        Devenga un salario mensual de <strong>${{sueldo}}</strong> ({{sueldoTexto}}),
+        cumpliendo con todas las responsabilidades propias de su cargo.
+      </p>
+      {{/if}}
+
+      <p>
+        Esta carta se expide a solicitud del interesado para los fines que estime
+        convenientes, en la ciudad de <strong>{{ciudad}}</strong> a los
+        <strong>{{dia}}</strong> días del mes de <strong>{{mes}}</strong> del año
+        <strong>{{anio}}</strong>.
+      </p>
+    </section>
+
+    <!-- FIRMA -->
+    <section class="signature">
+      <p>Atentamente,</p>
+      <br><br>
+      <p><strong>Andres Torres</strong></p>
+      <p>Representante Legal</p>
+      <p>DMS Software S.A.S.</p>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer">
+      <p>Documento generado automáticamente por el Portal DMS People</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script>
+    // ======================================================
+    // ========== CARGAR DATOS DEL USUARIO Y CARTA ==========
+    // ======================================================
+
+    async function cargarDatosCartaLaboral() {
+      const session = JSON.parse(localStorage.getItem("dms_user"));
+      const userId = session?.user?.id;
+
+      if (!userId) {
+        console.error("⚠️ No hay usuario activo en LocalStorage.");
+        return;
+      }
+
+      const url = `http://localhost:3000/api/infouser/${userId}`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error al consultar la API de usuario");
+        const { data } = await response.json();
+
+        // ======== Preparar datos del usuario ========
+        const nombre = data?.nombre || "Usuario";
+        const tipoDocumento = data?.tipo_documento || "";
+        const numeroDocumento = data?.numero_documento || "";
+        const fechaInicio = formatearFecha(data?.fecha_inicio);
+        const tipoContrato = data?.tipo_contrato || "";
+        const cargo = data?.cargo || "";
+        const sueldo = data?.sueldo || "0";
+        const ciudad = "Medellín"; // Cambia según tu contexto o API
+
+        // ======== Fecha actual ========
+        const fecha = new Date();
+        const dia = fecha.getDate();
+        const mes = obtenerNombreMes(fecha.getMonth());
+        const anio = fecha.getFullYear();
+
+        // ======== Renderizar los datos ========
+        document.body.innerHTML = document.body.innerHTML
+          .replace("{{fechaActual}}", formatearFecha(fecha))
+          .replace("{{aquienInterese}}", "A quien interese:")
+          .replace("{{nombreCompleto}}", nombre)
+          .replace("{{tipoDocumento}}", tipoDocumento)
+          .replace("{{numeroDocumento}}", numeroDocumento)
+          .replace("{{fechaInicio}}", fechaInicio)
+          .replace("{{tipoContrato}}", tipoContrato)
+          .replace("{{cargo}}", cargo)
+          .replace("{{sueldo}}", Number(sueldo).toLocaleString("es-CO"))
+          .replace("{{sueldoTexto}}", numeroALetras(Number(sueldo)))
+          .replace("{{ciudad}}", ciudad)
+          .replace("{{dia}}", dia)
+          .replace("{{mes}}", mes)
+          .replace("{{anio}}", anio);
+
+        console.log("✅ Carta laboral cargada correctamente.");
+      } catch (error) {
+        console.error("❌ Error cargando datos de la carta laboral:", error);
+      }
+    }
+
+    // ======================================================
+    // ========== FUNCIONES AUXILIARES ======================
+    // ======================================================
+
+    function formatearFecha(fecha) {
+      if (!fecha) return "";
+      const d = new Date(fecha);
+      const opciones = { year: "numeric", month: "long", day: "numeric" };
+      return d.toLocaleDateString("es-CO", opciones);
+    }
+
+    function obtenerNombreMes(indice) {
+      const meses = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      ];
+      return meses[indice];
+    }
+
+    // Convierte un número en texto (solo parte básica para salarios)
+    function numeroALetras(num) {
+      if (!num || isNaN(num)) return "";
+      const unidades = [
+        "", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"
+      ];
+      const decenas = [
+        "", "diez", "veinte", "treinta", "cuarenta", "cincuenta",
+        "sesenta", "setenta", "ochenta", "noventa"
+      ];
+
+      if (num < 10) return unidades[num];
+      if (num < 100) {
+        const dec = Math.floor(num / 10);
+        const uni = num % 10;
+        return decenas[dec] + (uni > 0 ? " y " + unidades[uni] : "");
+      }
+
+      return "valor en pesos colombianos";
+    }
+
+    // ======================================================
+    // ========== INICIALIZACIÓN ============================
+    // ======================================================
+
+    window.addEventListener("DOMContentLoaded", cargarDatosCartaLaboral);
+
+  </script>
+
+</body>
+
+</html>

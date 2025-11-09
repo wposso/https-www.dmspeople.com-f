@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta Laboral - Portal DMS People</title>
+  <link rel="stylesheet" href="cartaLaboralStyle.css" />
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software" />
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar">MM</div>
+        <div class="user-details">
+          <strong>Melissa Mora</strong>
+          <span>Empleado</span>
+        </div>
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li id="update-profile">Actualizar datos</li>
+            <li onclick="cerrarSesion()">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section class="letter-section">
+        <button class="back-btn" onclick="window.location.href='dashboard.html'">← Volver</button>
+        <h2>Generar Carta Laboral</h2>
+        <p>Revisa la información y genera tu carta laboral en formato PDF.</p>
+
+        <form id="letterForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="nombreCompleto" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de documento</label>
+              <input type="text" id="tipoDocumento" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Número de documento</label>
+              <input type="text" id="numeroDocumento" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de inicio laboral</label>
+              <input type="date" id="fechaInicio" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de contrato</label>
+              <input type="text" id="tipoContrato" readonly />
+            </div>
+
+            <div class="form-group">
+              <label>Cargo</label>
+              <input type="text" id="cargo" readonly />
+            </div>
+
+            <div class="form-group sueldo-check">
+              <label><input type="checkbox" id="incluirSueldo" checked /> Incluir sueldo en la carta</label>
+            </div>
+
+            <div class="form-group">
+              <label>A quien interese</label>
+              <input type="text" id="destinatario" placeholder="Ej: Banco BBVA" />
+            </div>
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn">Generar Carta</button>
+          </div>
+        </form>
+
+
+
+        <!-- HISTORIAL -->
+
+        <h3>Cartas generadas anteriormente</h3>
+
+        <table class="table-history">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>05/10/2025</td>
+              <td>Carta Laboral sin sueldo</td>
+              <td>
+                <button class="btn-small" onclick="abrirCartaLaboral()">📄 Descargar PDF</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <script src="./APIS/cartaLaboral.js"></script>
+
+  <script>
+    // Función para abrir la carta laboral en una nueva pestaña
+    function abrirCartaLaboral() {
+      window.open("cartaLaboralTemplate.html", "_blank");
+    }
+  </script>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <!-- MODALES Y ALERTAS -->
+  <div id="alert-box" class="alert-box"></div>
+
+  <div id="confirm-modal" class="confirm-modal">
+    <div class="confirm-content">
+      <h3>¿Generar carta laboral?</h3>
+      <p>Confirma que los datos mostrados son correctos antes de continuar.</p>
+      <div class="confirm-buttons">
+        <button id="confirm-yes" class="btn">Sí, generar</button>
+        <button id="confirm-no" class="btn-cancel">No, volver</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Menú usuario =====
+    const userInfo = document.getElementById("user-info");
+    const userMenu = document.getElementById("user-menu");
+    userInfo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+    window.addEventListener("click", () => (userMenu.style.display = "none"));
+
+    // ===== Cerrar sesión =====
+    function cerrarSesion() {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    }
+
+    // ===== Alertas visuales =====
+    const alertBox = document.getElementById("alert-box");
+    function mostrarAlerta(mensaje, tipo) {
+      alertBox.textContent = mensaje;
+      alertBox.className = `alert-box ${tipo}`;
+      alertBox.style.display = "block";
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => {
+          alertBox.style.display = "none";
+          alertBox.style.opacity = "1";
+        }, 300);
+      }, 2500);
+    }
+
+    // ===== Confirmar generación =====
+    const form = document.getElementById("letterForm");
+    const confirmModal = document.getElementById("confirm-modal");
+    const confirmYes = document.getElementById("confirm-yes");
+    const confirmNo = document.getElementById("confirm-no");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      confirmModal.style.display = "flex";
+    });
+
+    confirmYes.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+      mostrarAlerta("✅ Carta laboral generada exitosamente.", "success");
+      // Aquí se conectará el backend para crear el PDF
+    });
+
+    confirmNo.addEventListener("click", () => {
+      confirmModal.style.display = "none";
+    });
+
+    document.getElementById("update-profile").addEventListener("click", () => {
+      window.location.href = "actualizarDatos.html";
+    });
+
+    function cancelarCarta() {
+      window.location.href = "dashboard.html";
+    }
+  </script>
+</body>
+
+</html>

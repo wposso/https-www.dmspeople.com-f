@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal DMS People - Dashboard</title>
+  <link rel="stylesheet" href="dashboardStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <img src="recursos/logoblanco.png" alt="Logo DMS Software">
+        <h1>Portal DMS People</h1>
+      </div>
+
+      <div class="user-info" id="user-info">
+        <div class="user-avatar" id="user-avatar">MM</div>
+        <div class="user-details">
+          <strong id="user-name">---</strong>
+          <span id="user-role">---</span>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div class="user-menu" id="user-menu">
+          <ul>
+            <li id="update-profile">Actualizar datos</li>
+            <li id="logout">Cerrar sesión</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="active" data-section="dashboard">Dashboard</a></li>
+        <li><a href="vacaciones.html" data-section="vacaciones">Vacaciones</a></li>
+        <li><a href="cartaLaboral.html" data-section="documentos">Carta laboral</a></li>
+        <li><a href="nomina.html" data-section="Comprobantes">Comprobantes de nómina</a></li>
+        <li><a href="solicitudespendientes.html" data-section="solicitudes">Solicitudes pendientes</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+    <div class="container">
+      <section id="dashboard" class="section active">
+        <h2 id="welcome-title">Bienvenido</h2>
+        <p>Desde aquí puedes gestionar tus solicitudes, documentos laborales y mantener tu información al día.</p>
+
+        <div class="dashboard-cards">
+          <!-- VACACIONES -->
+          <div class="card">
+            <div class="icon">📅</div>
+            <h3>Solicitar Vacaciones</h3>
+            <p>Consulta tus días disponibles y crea nuevas solicitudes.</p>
+            <button class="btn">Ir a Vacaciones</button>
+          </div>
+
+          <!-- ACTUALIZAR INFORMACIÓN -->
+
+          <div class="card">
+            <div class="icon">👤</div>
+            <h3>Actualizar Información</h3>
+            <p>Mantén actualizados tus datos personales, dirección de contacto y datos de emergencia.</p>
+            <a href="actualizarDatos.html" class="btn">Actualizar Datos</a>
+          </div>
+
+
+          <!-- DOCUMENTOS -->
+          <div class="card">
+            <div class="icon">🧾</div>
+            <h3>Documentos Laborales</h3>
+            <p>Genera y descarga tus cartas laborales fácilmente.</p>
+            <a href="cartaLaboral.html" class="btn">Ver documentos</a>
+          </div>
+        </div>
+
+        <!-- 🧾 SECCIÓN: MIS SOLICITUDES -->
+        <div class="solicitudes-section">
+          <h3>Mis Solicitudes</h3>
+          <table class="solicitudes-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vacaciones</td>
+                <td>15/10/2025 - 20/10/2025</td>
+                <td><span class="status status-approved">Aprobado</span></td>
+                <td><button class="action-btn">Ver</button></td>
+              </tr>
+              <tr>
+                <td>Carta Laboral</td>
+                <td>10/10/2025</td>
+                <td><span class="status status-pending">Pendiente</span></td>
+                <td><button class="action-btn">Ver</button></td>
+              </tr>
+              <tr>
+                <td>Actualización de Datos</td>
+                <td>03/09/2025</td>
+                <td><span class="status status-rejected">Rechazado</span></td>
+                <td><button class="action-btn">Ver</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 DMS Software — Todos los derechos reservados</p>
+  </footer>
+
+  <script src="./APIS/dashboard.js"></script>
+  <script src="./APIS/solicitudes.js"></script>
+
+  <!-- SCRIPT -->
+  <script>
+    // Mostrar datos del usuario desde login
+    const stored = localStorage.getItem('dms_user');
+    if (stored) {
+      const user = JSON.parse(stored);
+      const name = user.nombre || "Empleado";
+      document.getElementById("user-name").textContent = name;
+      document.getElementById("welcome-title").textContent = `Bienvenido, ${name}`;
+      document.getElementById("user-avatar").textContent = name
+        .split(" ")
+        .map(n => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+    }
+
+    // Menú desplegable usuario
+    const userInfo = document.getElementById("user-info");
+    const userMenu = document.getElementById("user-menu");
+
+    userInfo.addEventListener("click", (e) => {
+      e.stopPropagation();
+      userMenu.style.display = userMenu.style.display === "block" ? "none" : "block";
+    });
+
+    window.addEventListener("click", () => {
+      userMenu.style.display = "none";
+    });
+
+    document.getElementById("update-profile").addEventListener("click", () => {
+      window.location.href = "actualizarDatos.html";
+    });
+
+
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("dms_user");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+
+</html>

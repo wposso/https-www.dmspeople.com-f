@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprobante de Nómina</title>
+  <link rel="stylesheet" href="nominaTempStyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <div class="page">
+    <!-- ENCABEZADO -->
+    <header class="letter-header">
+      <div class="logo-container">
+        <img src="recursos/logoazul.png" alt="Logo DMS Software" class="logo">
+      </div>
+      <h1>Comprobante de Nómina</h1>
+      <div class="date">
+        <p><strong>Fecha de generación:</strong> {{fechaActual}}</p>
+      </div>
+    </header>
+
+    <!-- INFORMACIÓN DEL EMPLEADO -->
+    <section class="employee-info">
+      <h3>Información del empleado</h3>
+      <table>
+        <tr>
+          <td><strong>Nombre:</strong> {{nombreEmpleado}}</td>
+          <td><strong>Documento:</strong> {{documento}}</td>
+        </tr>
+        <tr>
+          <td><strong>Cargo:</strong> {{cargo}}</td>
+          <td><strong>Tipo de contrato:</strong> {{tipoContrato}}</td>
+        </tr>
+        <tr>
+          <td><strong>Periodo:</strong> {{periodo}}</td>
+          <td><strong>Quincena:</strong> {{quincena}}</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- DETALLE DE INGRESOS Y DESCUENTOS -->
+    <section class="detalle">
+      <h3>Detalle de pago</h3>
+      <table class="table-detalle">
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Tipo</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sueldo básico</td>
+            <td>Ingreso</td>
+            <td>$ {{sueldoBasico}}</td>
+          </tr>
+          <tr>
+            <td>Auxilio de transporte</td>
+            <td>Ingreso</td>
+            <td>$ {{auxilioTransporte}}</td>
+          </tr>
+          <tr>
+            <td>Salud</td>
+            <td>Descuento</td>
+            <td>$ {{salud}}</td>
+          </tr>
+          <tr>
+            <td>Pensión</td>
+            <td>Descuento</td>
+            <td>$ {{pension}}</td>
+          </tr>
+          <tr>
+            <td>Retención en la fuente</td>
+            <td>Descuento</td>
+            <td>$ {{retencion}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- TOTALES -->
+    <section class="totales">
+      <div class="total-box">
+        <p><strong>Total ingresos:</strong> $ {{totalIngresos}}</p>
+        <p><strong>Total descuentos:</strong> $ {{totalDescuentos}}</p>
+        <p class="neto"><strong>Neto a pagar:</strong> $ {{netoPagar}}</p>
+      </div>
+    </section>
+
+    <!-- FIRMA -->
+    <section class="signature">
+      <p>Atentamente,</p>
+      <br><br>
+      <p><strong>{{nombreJefe}}</strong></p>
+      <p>{{cargoJefe}}</p>
+      <p>DMS Software S.A.S.</p>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer">
+      <p>Documento generado automáticamente por el Portal DMS People</p>
+    </footer>
+  </div>
+
+  <script src="./APIS/nomina.js"></script>
+
+  <!-- LIBRERÍA PARA EXPORTAR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script>
+    function generarPDF() {
+      const element = document.querySelector('.page');
+      const opciones = {
+        margin: [0.5, 0.5, 0.5, 0.5],
+        filename: 'Comprobante_Nomina.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opciones).from(element).save();
+    }
+  </script>
+</body>
+
+</html>

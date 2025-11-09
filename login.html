@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="loginStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="left-section">
+    <div class="left-content">
+      <img src="recursos/logoblanco.png" alt="Logo DMS Software">
+      <h1>Bienvenido al Portal DMS People</h1>
+      <p>Gestiona tus vacaciones, comprobantes de nómina y documentos laborales desde un solo lugar.</p>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <div class="login-container">
+      <h2>Iniciar Sesión</h2>
+
+      <!-- Mensaje de error inline -->
+      <div id="login-error" style="display:none; color:#7a1d1d; background:#ffd8d8; padding:10px; border-radius:6px; margin-bottom:12px;">
+        Usuario o contraseña incorrectos.
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label for="usuario">Usuario</label>
+          <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu número de cédula" required>
+        </div>
+
+        <div class="input-group">
+          <label for="contrasena">Contraseña</label>
+          <input type="password" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+        </div>
+
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="footer-text">© 2025 DMS Software — Todos los derechos reservados</p>
+    </div>
+  </div>
+
+  <script src="./APIS/credencialesIngreso.js"></script>
+
+  <script>
+    // Credenciales quemadas (solo para maqueta)
+    const HARDCODED_USER = "1002690828";
+    const HARDCODED_PASS = "1002690828";
+
+    function showError(msg) {
+      const err = document.getElementById('login-error');
+      err.textContent = msg;
+      err.style.display = 'block';
+    }
+
+    function hideError() {
+      const err = document.getElementById('login-error');
+      err.style.display = 'none';
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      hideError();
+
+      const usuario = document.getElementById('usuario').value.trim();
+      const contrasena = document.getElementById('contrasena').value;
+
+      // Validación simple contra credenciales quemadas
+      if (usuario === HARDCODED_USER && contrasena === HARDCODED_PASS) {
+        // Guardar info mínima para el dashboard (maqueta)
+        localStorage.setItem('dms_user', JSON.stringify({
+          cedula: usuario,
+          nombre: 'Melissa Mora'
+        }));
+
+        // Opcional: efecto de loader antes de redirigir (500ms)
+        document.querySelector('button[type="submit"]').textContent = 'Entrando...';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 500);
+      } else {
+        showError('Usuario o contraseña incorrectos. Verifica e intenta nuevamente.');
+      }
+    }
+  </script>
+</body>
+</html>

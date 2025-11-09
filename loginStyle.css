@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* 🌆 LADO IZQUIERDO (imagen con opacidad) */
+.left-section {
+  width: 50%;
+  position: relative;
+  background: url("recursos/fondo.jpg") no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+  text-align: center;
+}
+
+/* Capa azul con opacidad sobre la imagen */
+.left-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 35, 66, 0.6);
+  z-index: 1;
+}
+
+/* Contenido sobre la imagen */
+.left-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+}
+
+.left-content img {
+  width: 160px;
+  margin-bottom: 20px;
+}
+
+.left-content h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.left-content p {
+  font-size: 17px;
+  width: 70%;
+  margin: 0 auto;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* 🧾 LADO DERECHO (formulario de login) */
+.right-section {
+  width: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  width: 80%;
+  max-width: 390px;
+}
+
+h2 {
+  color: #0a2342;
+  margin-bottom: 25px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #0a2342;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #0d4a87;
+  outline: none;
+  box-shadow: 0 0 4px rgba(13, 74, 135, 0.3);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0d4a87;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #0a2342;
+}
+
+.footer-text {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #777;
+  text-align: center;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+  body {
+    flex-direction: column;
+  }
+
+  .left-section, .right-section {
+    width: 100%;
+    height: 50vh;
+  }
+
+  .left-content img {
+    width: 120px;
+  }
+
+  .left-content p {
+    width: 90%;
+  }
+}
