@@ -1,17 +1,20 @@
-# Imagen base de Nginx
+# Imagen base Nginx
 FROM nginx:alpine
 
-# Elimina la configuración por defecto
+# Instalar envsubst (para sustituir variables en el arranque)
+RUN apk add --no-cache gettext
+
+# Elimina archivos por defecto
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copia los archivos del proyecto
+# Copia los archivos del sitio
 COPY . /usr/share/nginx/html
 
-# Copia una configuración de Nginx personalizada (la haremos abajo)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copia la plantilla de configuración (ver más abajo)
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# Exponer el puerto (Railway lo ignora, pero lo dejamos por claridad)
+# Expone el puerto (Railway lo ignora, pero es buena práctica)
 EXPOSE 80
 
-# Comando de inicio
-CMD ["nginx", "-g", "daemon off;"]
+# Sustituye $PORT al iniciar y lanza Nginx
+CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
