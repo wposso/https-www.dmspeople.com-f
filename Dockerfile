@@ -1,13 +1,16 @@
-# Imagen base liviana de Nginx
+# Imagen base de Nginx
 FROM nginx:alpine
 
 # Elimina la configuración por defecto
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copia todos tus archivos del proyecto al contenedor
+# Copia los archivos del proyecto
 COPY . /usr/share/nginx/html
 
-# Expone el puerto 80 (Railway lo maneja automáticamente)
+# Copia una configuración de Nginx personalizada (la haremos abajo)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Exponer el puerto (Railway lo ignora, pero lo dejamos por claridad)
 EXPOSE 80
 
 # Comando de inicio
